@@ -9,7 +9,7 @@ parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 efficientvit_path = os.path.abspath(os.path.join(current_directory, '..', 'model', 'vit'))
 sys.path.append(efficientvit_path)
 sys.path.append(parent_directory)
-from model.vit.vitgpt1 import ChatAI
+from model.vit.vitgpt import ChatAI
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 import ast
@@ -75,7 +75,6 @@ class VIT_Web(AsyncWebsocketConsumer):
 
 
         his_save = ast.literal_eval(message_instance.history)
-        print('his_save:',his_save)
 
         # new_record = {'role': 'user', 'content': message}
         # his_save.append(new_record)
@@ -86,8 +85,6 @@ class VIT_Web(AsyncWebsocketConsumer):
 
         reply,his = ChatAI(message=message,his=his_save)
 
-        print('reply:',reply)
-        print('his:',his)     
 
         # reply = self.test(message, message_instance.history)
 

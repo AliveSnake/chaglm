@@ -15,8 +15,9 @@ sys.path.append("..")
 current_directory = os.getcwd()
 parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 sys.path.append(parent_directory)
-from model.vit.vitgpt1 import efficientvit
+from model.vit.vitgpt import efficientvit
 efficientvit_path = os.path.abspath(os.path.join(current_directory, '..', 'model', 'vit'))
+
 sys.path.append(efficientvit_path)
 class VITListCreateAPIView(APIView):
 
@@ -33,8 +34,8 @@ class VITListCreateAPIView(APIView):
             note = serializer.save()
 
             current_directory = os.getcwd()
-            father_path=os.path.abspath (os.path.dirname (current_directory)+os.path.sep+ "./grape/grape")
-            image_directory = os.path.join(father_path, 'static', 'vit')
+            image_directory = os.path.join(current_directory, 'static', 'vit')
+
 
             user_id = serializer.validated_data['user_id'].phone
             user = CustomUser.objects.get(phone=user_id)
@@ -49,13 +50,14 @@ class VITListCreateAPIView(APIView):
             uploaded_file = request.FILES.get('images')
             str0 = uploaded_file.name.replace(" ", "_").replace("(","").replace(")","")
             image_path = os.path.join(image_directory,str0)
-            result_text=efficientvit(image_path)
+            result_text,his_text=efficientvit(image_path)
             note.text = result_text
 
-            his = f'[AI：{result_text}]'
-            test_message = [{'role': 'user', 'content': '目前历史对话记录功能未链接大语言模型。'}, {'role': 'assistant', 'metadata': '', 'content': '历史记录功能链接大语言模型之后便输出正常。'}]
-            # Message.objects.create(user_id=user,image=image,reply=result_text,history=his)
-            Message.objects.create(user_id=user,image=image,reply=result_text,history=test_message)
+            # his = f'[AI：{result_text}]'
+            his = his_text
+            # test_message = [{'role': 'user', 'content': '目前历史对话记录功能未链接大语言模型。'}, {'role': 'assistant', 'metadata': '', 'content': '历史记录功能链接大语言模型之后便输出正常。'}]
+            Message.objects.create(user_id=user,image=image,reply=result_text,history=his)
+            # Message.objects.create(user_id=user,image=image,reply=result_text,history=test_message)
             note.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
