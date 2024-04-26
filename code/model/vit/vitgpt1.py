@@ -14,9 +14,10 @@ from transformers import AutoTokenizer, AutoModel
 #resnet
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 current_directory = os.path.dirname(__file__)
-resNet_path = os.path.abspath(os.path.join(current_directory, '..', 'vit','resNet101y.pth'))
+resNet_path = '/mnt/nas/resNet101y.pth'
+chatglm_path = '/mnt/nas/freezeglm10'
+# resNet_path = os.path.abspath(os.path.join(current_directory, '..', 'vit','resNet101y.pth'))
 # chatglm_path = os.path.abspath(os.path.join(current_directory, '..', 'vit','chatglm3'))
-chatglm_path = 'D:/Models/ChatGLM3/freezeglm10'
 # create model
 cls_model = resnet101(num_classes=52).to(device)
 
